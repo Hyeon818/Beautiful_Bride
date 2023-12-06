@@ -1,4 +1,3 @@
-/*
 package com.memory.beautifulbride.config;
 
 import lombok.RequiredArgsConstructor;
@@ -25,19 +24,28 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
 
-                .headers((header) ->
+                .headers(header ->
                         header.frameOptions(
                                 HeadersConfigurer.FrameOptionsConfig::sameOrigin
                         )
                 )
 
-                .sessionManagement((session) ->
+                .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                .authorizeHttpRequests((registry) ->
+                .authorizeHttpRequests(registry ->
                         registry.requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated()
+
+                )
+
+                .formLogin(formLogin ->
+                        formLogin.loginPage("/auth/login")
+                                .loginProcessingUrl("/member/loginProcessing")
+                                .usernameParameter("MEM_ID")
+                                .passwordParameter("MEM_PWD")
+                                .defaultSuccessUrl("/")
                 )
 
                 .build();
@@ -47,4 +55,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}*/
+}
